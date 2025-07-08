@@ -1,20 +1,30 @@
 <script setup>
 import { reactive } from 'vue';
 import { useRouter } from 'vue-router';
+import { join } from '@/services/accountService';
 
+const router = useRouter();
 const state = reactive({
   form: {
-    name: 'a',
-    loginId: 'b',
-    loginPw: 'c',
+    name: '',
+    loginId: '',
+    loginPw: '',
   },
 });
+
+const submit = async () => {
+    const res = await join(state.form);
+    if(res.status === 200) {
+        alert('회원가입을 축하합니다.')
+        await router.push('/');
+    }
+}
 </script>
 
 <template>
   <div class="join">
     <div class="container">
-      <form class="py-5 d-flex flex-column gap-3">
+      <form class="py-5 d-flex flex-column gap-3" @submit.prevent="submit">
         <h1 class="h5 mb-3">회원가입</h1>
         <div class="form-floating">
           <input

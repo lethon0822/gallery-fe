@@ -1,41 +1,54 @@
 <script setup>
+import { logout } from '@/services/accountService';
+import { useCounterStore } from '@/stores/account.js';
+
+const account = useCounterStore();
+
 //로그아웃
 const logoutAccount = async () => {
-    alert("준비 중!")
-}
+  if (!confirm('로그아웃하시겠습니까?')) {
+    return;
+  }
+  const res = await logout();
+  if (res === undefined || res.status !== 200) {
+    return;
+  }
+  account.setLoggedIn(false);
+  await router.push('/');
+};
 </script>
 
 <template>
-    <header>
-        <div class="navbar navbar-dark bg-dark text-white shadow-sm">
-            <div class="container">
-                <router-link to="/" class="navbar-brand">
-                    <strong>Gallery</strong>
-                </router-link>
-                <div class="menus d-flex gap-3">
-                    <template v-if="true">
-                        <router-link to="/login">로그인</router-link>
-                        <router-link to="/join">회원가입</router-link>
-                    </template>
-                    <template v-else>
-                        <a @click="logoutAccount()">로그아웃</a>
-                        <router-link to="/orders">주문 내역</router-link>
-                        <router-link to="/cart">장바구니</router-link>
-                    </template>
-                </div>
-            </div>
+  <header>
+    <div class="navbar navbar-dark bg-dark text-white shadow-sm">
+      <div class="container">
+        <router-link to="/" class="navbar-brand">
+          <strong>Gallery</strong>
+        </router-link>
+        <div class="menus d-flex gap-3">
+          <template v-if="account.state.loggedIn">
+            <a @click="logoutAccount()">로그아웃</a>
+            <router-link to="/orders">주문 내역</router-link>
+            <router-link to="/cart">장바구니</router-link>
+          </template>
+          <template v-else>
+            <router-link to="/login">로그인</router-link>
+            <router-link to="/join">회원가입</router-link>
+          </template>
         </div>
-    </header>
+      </div>
+    </div>
+  </header>
 </template>
 
 <style lang="scss">
-header{
-    .menus{
-        a{
-            cursor: pointer;
-            color: #fff;
-            text-decoration: none;
-        }
+header {
+  .menus {
+    a {
+      cursor: pointer;
+      color: #fff;
+      text-decoration: none;
     }
+  }
 }
 </style>

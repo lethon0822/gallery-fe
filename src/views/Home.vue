@@ -1,6 +1,11 @@
 <script setup>
-import Join from './Join.vue';
+import { getItems } from '@/services/itemService'
+import { onMounted } from 'vue';
 
+onMounted(async ()=>{
+  const res = await getItems();
+  console.log(res.data);
+})
 
 </script>
 
