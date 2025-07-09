@@ -1,20 +1,33 @@
 <script setup>
-import { getItems } from '@/services/itemService'
-import { onMounted } from 'vue';
+import Card from '@/components/Card.vue';
+import { getItems } from '@/services/itemService';
+import { reactive, onMounted } from 'vue';
 
-onMounted(async ()=>{
+const state = reactive({
+  items: [],
+});
+
+onMounted(async () => {
   const res = await getItems();
-  console.log(res.data);
-})
-
+  if (res.status !== 200) {
+    return;
+  }
+  state.items = res.data;
+});
 </script>
 
 <template>
-<div class="container">
-  <h1 class="mt-5">Hello, Home</h1>
-</div>
+  <div class="home">
+    <div class="album py-5 bg-light">
+      <div class="container">
+        <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3 g-3">
+          <div class="col" v-for="item in state.items">
+            <Card :item="item" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
