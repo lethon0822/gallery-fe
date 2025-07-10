@@ -1,8 +1,10 @@
 <script setup>
 import { computed } from 'vue';
 import { addItem } from '@/services/cartService';
-import {useCounterStore} from '@/stores/account'
+import { useCounterStore } from '@/stores/account'
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const counterStore = useCounterStore();
 const props = defineProps({
   item: {
@@ -31,10 +33,9 @@ const put = async () => {
 
   }if (res === undefined || res.status !== 200) {
     return;
+  } else if (confirm('장바구니에 상품을 담았습니다. 장바구니로 이동하시겠습니까?')){
+      router.push('/cart');
   }
-
-  
-  console.log('카트');
 };
 </script>
 
@@ -59,9 +60,7 @@ const put = async () => {
         <button class="btn btn-primary btn-sm" @click="put()">
           장바구니 담기
         </button>
-        <small class="price text-muted"
-          >{{ props.item.price.toLocaleString() }}원</small
-        >
+        <small class="price text-muted">{{ props.item.price.toLocaleString() }}원</small>
         <small class="real text-danget">{{ computedItemDiscountPrice }}</small>
       </div>
     </div>
