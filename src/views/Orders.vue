@@ -1,4 +1,25 @@
-<script setup></script>
+<script setup>
+import { getOrders } from '@/services/orderService';
+import { onMounted, reactive } from 'vue';
+
+const state = reactive({
+  orders: []
+})
+
+const load = async () => {
+  const res = await getOrders();
+  if (res === undefined || res.status !== 200) {
+    alert('오류 발생');
+    return;
+  }
+  state.orders = res.data;
+}
+
+onMounted(async()=>{
+  await load();
+})
+</script>
+
 
 <template>
   <div class="orders">
@@ -15,14 +36,14 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(o, idx) in state.orders">
-            <td class="text-center">{{ state.orders.length }}</td>
-            <td>{{ o.name }}</td>
-            <td>{{ o.payment }}</td>
-            <td>{{ o.amount.toLocalString() }}원</td>
-            <td>{{ o.created.toLocalString() }}</td>
+          <tr v-for="(item, idx) in state.orders" >
+            <td class="text-center">{{ state.orders.length - idx}}</td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.payment }}</td>
+            <td>{{ item.amount.toLocaleString() }}원</td>
+            <td>{{ item.created.toLocaleString() }}</td>
             <td>
-              <router-link :to="`/orders/${o.id}`">자세히 보기</router-link>
+              <router-link :to="`/orders/${item.id}`">자세히 보기</router-link>
             </td>
           </tr>
         </tbody>

@@ -9,7 +9,6 @@ import { check } from '@/services/accountService';
 const route = useRoute();
 const account = useCounterStore();
 const checkAccount = async () => {
-  console.log('로그인 체크');
   const res = await check();
   if (res === undefined || res.status != 200) {
     account.setChecked(false);
