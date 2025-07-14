@@ -19,7 +19,6 @@ const route = useRoute();
 onMounted(async () => {
   const orderId = route.params.id;
   const res = await getOrder(orderId);
-  console.log(res.data);
   if (res === undefined || res.status !== 200) {
     alert('오류 발생');
     return;
@@ -97,6 +96,7 @@ onMounted(async () => {
 </template>
 
 <style lang="scss" scoped>
+table img { width: 150px }
 .order-detail {
   > .container {
     table {
